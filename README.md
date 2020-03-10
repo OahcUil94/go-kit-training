@@ -1,5 +1,22 @@
 # go-kit微服务套件使用
 
+## go-kit目录分析
+
+```
+.
+├── auth 权限验证
+├── circuitbreaker 熔断器
+├── cmd 自动生成代码命令行工具
+├── endpoint 
+├── log 日志
+├── metrics 监控指标
+├── ratelimit 限流
+├── sd 服务发现
+├── tracing 追踪
+├── transport
+└── util 工具包
+```
+
 ## ServerOption
 
 ```
