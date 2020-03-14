@@ -2,6 +2,7 @@
 
 ## 目录 
 
+- `gk-grpc`: grpc的使用
 - `gk-truss`: truss代码生成工具的使用
 - `gk-kit`: kit代码生成工具的使用
 
