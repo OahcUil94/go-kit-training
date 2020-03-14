@@ -4,7 +4,7 @@
 
 ## 简介
 
-`kit`是用来生成`go-kit`微服务代码的工具
+`kit`是用来生成`go-kit`微服务代码的工具, 后面用来快速生成多个服务, 方便测试服务调用, 链路追踪等功能
 
 ## 常用命令
 
@@ -44,3 +44,30 @@ type HelloService interface {
 
 ### 根据定义好的接口方法，生成代码
 
+生成其他代码: `kit g s hello`, 会产生以下目录结构(默认生成的transport是http):
+
+```html
+.
+└── hello
+    ├── cmd
+    │   ├── main.go
+    │   └── service
+    │       ├── service.go
+    │       └── service_gen.go
+    └── pkg
+        ├── endpoint
+        │   ├── endpoint.go
+        │   └── endpoint_gen.go
+        ├── http
+        │   ├── handler.go
+        │   └── handler_gen.go
+        └── service
+            ├── middleware.go
+            └── service.go
+```
+
+生成grpc: `kit g s hello -t grpc`: 
+
+```html
+
+```
