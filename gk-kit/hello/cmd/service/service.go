@@ -9,17 +9,19 @@ import (
 	"os/signal"
 	"syscall"
 
-	endpoint "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/endpoint"
-	grpc "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/grpc"
-	pb "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/grpc/pb"
-	http "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/http"
-	service "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/service"
+	endpoint "gk-kit/hello/pkg/endpoint"
+	grpc "gk-kit/hello/pkg/grpc"
+	pb "gk-kit/hello/pkg/grpc/pb"
+	http "gk-kit/hello/pkg/http"
+	service "gk-kit/hello/pkg/service"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	lightsteptracergo "github.com/lightstep/lightstep-tracer-go"
 	group "github.com/oklog/oklog/pkg/group"
 	opentracinggo "github.com/opentracing/opentracing-go"
-	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
+	"github.com/openzipkin/zipkin-go"
+	zipkinhttp "github.com/openzipkin/zipkin-go/reporter/http"
+	zipkingoopentracing "github.com/openzipkin-contrib/zipkin-go-opentracing"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
 	grpc1 "google.golang.org/grpc"
 	appdash "sourcegraph.com/sourcegraph/appdash"
@@ -43,25 +45,29 @@ var appdashAddr = fs.String("appdash-addr", "", "Enable Appdash tracing via an A
 
 func Run() {
 	fs.Parse(os.Args[1:])
-
 	logger = log.NewLogfmtLogger(os.Stderr)
 	logger = log.With(logger, "ts", log.DefaultTimestampUTC)
 	logger = log.With(logger, "caller", log.DefaultCaller)
 
 	if *zipkinURL != "" {
 		logger.Log("tracer", "Zipkin", "URL", *zipkinURL)
-		collector, err := zipkingoopentracing.NewHTTPCollector(*zipkinURL)
+		reporter := zipkinhttp.NewReporter(*zipkinURL)
+		defer reporter.Close()
+		// create our local service endpoint
+		endpoint, err := zipkin.NewEndpoint("hello", "localhost:80")
 		if err != nil {
 			logger.Log("err", err)
 			os.Exit(1)
 		}
-		defer collector.Close()
-		recorder := zipkingoopentracing.NewRecorder(collector, false, "localhost:80", "hello")
-		tracer, err = zipkingoopentracing.NewTracer(recorder)
+		nativeTracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
 		if err != nil {
 			logger.Log("err", err)
 			os.Exit(1)
 		}
+		// use zipkin-go-opentracing to wrap our tracer
+		tracer = zipkingoopentracing.Wrap(nativeTracer)
+		// optionally set as Global OpenTracing tracer instance
+		// opentracinggo.SetGlobalTracer(tracer)
 	} else if *lightstepToken != "" {
 		logger.Log("tracer", "LightStep")
 		tracer = lightsteptracergo.NewTracer(lightsteptracergo.Options{AccessToken: *lightstepToken})

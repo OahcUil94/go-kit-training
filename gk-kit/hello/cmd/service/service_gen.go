@@ -2,8 +2,8 @@
 package service
 
 import (
-	endpoint "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/endpoint"
-	http1 "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/http"
+	endpoint "gk-kit/hello/pkg/endpoint"
+	http1 "gk-kit/hello/pkg/http"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	opentracing "github.com/go-kit/kit/tracing/opentracing"

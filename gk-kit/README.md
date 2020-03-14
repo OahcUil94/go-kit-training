@@ -66,7 +66,7 @@ type HelloService interface {
             └── service.go
 ```
 
-生成grpc: `kit g s hello -t grpc`: 
+生成grpc: `kit g s hello -t grpc`, 新增的内容有以下这些:  
 
 ```html
 .
@@ -87,3 +87,58 @@ type HelloService interface {
             ├── middleware.go
             └── service.go
 ```
+
+> 当重新执行`kit g s hello`命令和添加endpoints后，以`_gen`结尾的文件会重新生成 
+
+### 执行cmd/main.go
+
+安装依赖: `go mod tidy`, 若出现下面的错误: 
+
+```
+go: finding module for package github.com/openzipkin/zipkin-go-opentracing
+go: found github.com/openzipkin/zipkin-go-opentracing in github.com/openzipkin/zipkin-go-opentracing v0.4.5
+go: gk-kit/hello/cmd/service imports
+	github.com/openzipkin/zipkin-go-opentracing: github.com/openzipkin/zipkin-go-opentracing@v0.4.5: parsing go.mod:
+	module declares its path as: github.com/openzipkin-contrib/zipkin-go-opentracing
+	        but was required as: github.com/openzipkin/zipkin-go-opentracing
+```
+
+用`github.com/openzipkin-contrib/zipkin-go-opentracing`来替换`github.com/openzipkin/zipkin-go-opentracing`即可.
+
+由于`zipkin-go-opentracing`包升级的原因, `cm/service/service.go`文件的内容需要做一些调整：
+
+```go
+import (
+    opentracinggo "github.com/opentracing/opentracing-go"
+	"github.com/openzipkin/zipkin-go"
+	zipkinhttp "github.com/openzipkin/zipkin-go/reporter/http"
+	zipkingoopentracing "github.com/openzipkin-contrib/zipkin-go-opentracing"
+)
+
+func Run() {
+	if *zipkinURL != "" {
+		logger.Log("tracer", "Zipkin", "URL", *zipkinURL)
+		reporter := zipkinhttp.NewReporter(*zipkinURL)
+		defer reporter.Close()
+		// create our local service endpoint
+		endpoint, err := zipkin.NewEndpoint("hello", "localhost:80")
+		if err != nil {
+			logger.Log("err", err)
+			os.Exit(1)
+		}
+		nativeTracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
+		if err != nil {
+			logger.Log("err", err)
+			os.Exit(1)
+		}
+		// use zipkin-go-opentracing to wrap our tracer
+		tracer = zipkingoopentracing.Wrap(nativeTracer)
+		// optionally set as Global OpenTracing tracer instance
+		// opentracinggo.SetGlobalTracer(tracer)
+    }
+}
+```
+
+执行`go run cmd/service/main.go`, 测试地址: `http://localhost:8080/metrics`
+
+> 关于`zipkin`包升级代码不兼容的问题, 可使用这个kit库：[https://github.com/GrantZheng/kit](https://github.com/GrantZheng/kit)

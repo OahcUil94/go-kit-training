@@ -2,7 +2,7 @@
 package http
 
 import (
-	endpoint "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/endpoint"
+	endpoint "gk-kit/hello/pkg/endpoint"
 	http "github.com/go-kit/kit/transport/http"
 	http1 "net/http"
 )

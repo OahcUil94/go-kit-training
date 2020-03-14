@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	endpoint "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/endpoint"
+	endpoint "gk-kit/hello/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
 	"net/http"
 )
