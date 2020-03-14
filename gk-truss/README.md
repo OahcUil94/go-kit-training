@@ -18,3 +18,30 @@
 -u参数: 利用网络来更新已有的代码包及其依赖包 
 -d参数: 表示只执行下载动作，不执行安装动作
 ```
+
+## 自动生成代码
+
+```html
+.
+├── echo-service
+│   ├── cmd
+│   │   └── echo
+│   │       └── main.go
+│   ├── handlers
+│   │   ├── handlers.go
+│   │   ├── hooks.go
+│   │   └── middlewares.go
+│   └── svc
+│       ├── client
+│       │   ├── grpc
+│       │   │   └── client.go
+│       │   └── http
+│       │       └── client.go
+│       ├── endpoints.go
+│       ├── server
+│       │   └── run.go
+│       ├── transport_grpc.go
+│       └── transport_http.go
+├── echo.pb.go
+└── echo.proto
+```
