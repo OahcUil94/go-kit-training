@@ -69,5 +69,21 @@ type HelloService interface {
 生成grpc: `kit g s hello -t grpc`: 
 
 ```html
-
+.
+└── hello
+    ├── cmd
+    │   └── service
+    │       ├── service.go
+    │       └── service_gen.go
+    └── pkg       
+        ├── grpc
+        │   ├── handler.go
+        │   ├── handler_gen.go
+        │   └── pb
+        │       ├── compile.sh
+        │       ├── hello.pb.go
+        │       └── hello.proto       
+        └── service
+            ├── middleware.go
+            └── service.go
 ```

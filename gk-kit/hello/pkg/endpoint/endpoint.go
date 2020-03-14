@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"context"
+
 	service "github.com/OahcUil94/go-kit-training/gk-kit/hello/pkg/service"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
