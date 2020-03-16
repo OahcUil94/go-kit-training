@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/OahcUil94/go-kit-training/gk-kitgen/service/endpoints"
+	"gk-kitgen/service/endpoints"
 	httptransport "github.com/go-kit/kit/transport/http"
 )
 

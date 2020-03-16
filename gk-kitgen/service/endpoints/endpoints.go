@@ -3,7 +3,7 @@ package endpoints
 import (
 	"context"
 
-	"github.com/OahcUil94/go-kit-training/gk-kitgen/service/service"
+	"gk-kitgen/service/service"
 	"github.com/go-kit/kit/endpoint"
 )
 
