@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	pb "github.com/OahcUil94/go-kit-training/gk-truss"
-	"github.com/OahcUil94/go-kit-training/gk-truss/echo-service/svc"
+	pb "gk-truss"
+	"gk-truss/echo-service/svc"
 )
 
 // WrapEndpoints accepts the service's entire collection of endpoints, so that a

@@ -17,7 +17,7 @@ import (
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 
 	// This Service
-	pb "github.com/OahcUil94/go-kit-training/gk-truss"
+	pb "gk-truss"
 )
 
 // MakeGRPCServer makes a set of endpoints available as a gRPC EchoServer.

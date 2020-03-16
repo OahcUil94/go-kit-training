@@ -10,8 +10,8 @@ import (
 
 	"github.com/go-kit/kit/log"
 
-	"github.com/OahcUil94/go-kit-training/gk-middlewarer/service"
-	"github.com/OahcUil94/go-kit-training/gk-middlewarer/service/endpoint"
+	"gk-middlewarer/service"
+	"gk-middlewarer/service/endpoint"
 )
 
 type loggingStringService struct {

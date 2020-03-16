@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 
-	pb "github.com/OahcUil94/go-kit-training/gk-truss"
+	pb "gk-truss"
 )
 
 // NewService returns a naïve, stateless implementation of Service.
