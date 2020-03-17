@@ -37,3 +37,15 @@ ServerOption为Serve设置可选的函数调用, 有以下几种:
 正常的请求流程: ServerBefore -> decode -> endpoint -> service -> ServerAfter -> encode -> ServerFinalizer
 出现错误的请求流程: ServerBefore -> 出现错误(decode -> endpoint -> encode) -> ServerErrHandler -> ServerErrorEncoder(可写httpResponse) -> ServerFinalizer
 ```
+
+## go和前端时间互转
+
+go使用`time.Time`, 前端使用该函数: 
+
+```javascript
+function getTime(ts) {
+    const date = new Date(ts);
+    const tzoffset = date.getTimezoneOffset() * 60000;
+    return (new Date(date.getTime() - tzoffset)).toISOString().slice(0, -1) + '+08:00';
+}
+```
